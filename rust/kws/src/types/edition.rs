@@ -20,7 +20,7 @@ impl Edition {
 
     pub fn keywords(&self) -> impl Iterator<Item = Keyword> {
         KeywordDiscriminants::iter().filter_map(|discriminant| {
-            let keyword = Keyword::from(discriminant);
+            let keyword = Keyword::from(&discriminant);
             (keyword.category)(self).map(|_| keyword)
         })
     }

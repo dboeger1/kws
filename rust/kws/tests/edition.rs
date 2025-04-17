@@ -14,6 +14,7 @@ use std::{
 
 #[test]
 fn keywords() {
+    println!("STUFF");
     for (edition, expected) in &*EXPECTED {
         for (category, keywords) in expected {
             assert_eq!(

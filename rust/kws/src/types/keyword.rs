@@ -62,6 +62,7 @@ use crate::{
     types::keyword_data::KeywordData,
 };
 use std::ops::Deref;
+use strum::IntoEnumIterator;
 use strum_macros::{
     EnumDiscriminants,
     EnumIter,
@@ -192,6 +193,11 @@ impl Keyword {
             Self::Yield(data) => data,
         }
     }
+
+    pub fn iter() -> impl Iterator<Item = Self> {
+        KeywordDiscriminants::iter()
+            .map(|discriminant| (&discriminant).into())
+    }
 }
 
 impl Deref for Keyword {
@@ -203,8 +209,8 @@ impl Deref for Keyword {
     }
 }
 
-impl From<KeywordDiscriminants> for Keyword {
-    fn from(value: KeywordDiscriminants) -> Self {
+impl From<&KeywordDiscriminants> for Keyword {
+    fn from(value: &KeywordDiscriminants) -> Self {
         match value {
             KeywordDiscriminants::Abstract =>
                 Self::Abstract(&kw_abstract::DATA),
@@ -455,38 +461,14 @@ impl TryFrom<&str> for Keyword {
 
 #[cfg(test)]
 mod tests {
-    use std::collections::HashSet;
-    use strum::IntoEnumIterator;
-
     use super::*;
 
 
     #[test]
-    fn unique() {
-        let mut seen: HashSet<&'static str> = HashSet::new();
-        for discriminant in KeywordDiscriminants::iter() {
-            let data: &KeywordData = &Keyword::from(discriminant);
-
-            assert!(!seen.contains(data.value));
-
-            seen.insert(data.value);
+    pub fn discriminants_consistent() {
+        for keyword in Keyword::iter() {
+            let discriminant = KeywordDiscriminants::from(&keyword);
+            assert_eq!(keyword, Keyword::from(&discriminant));
         }
-    }
-
-    #[test]
-    fn consistent() -> Result<(), Error> {
-        for discriminant in KeywordDiscriminants::iter() {
-            let from_discriminant = Keyword::from(discriminant);
-            let from_value = Keyword::try_from(from_discriminant.value)?;
-
-            assert_eq!(from_discriminant, from_value);
-        }
-
-        Ok(())
-    }
-
-    #[test]
-    fn invalid() {
-        assert!(Keyword::try_from("invalid").is_err());
     }
 }

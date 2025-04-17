@@ -2,6 +2,7 @@ pub(crate) mod error;
 pub(crate) mod types;
 
 
+pub use error::Error;
 pub use types::{
     category::Category,
     edition::Edition,
