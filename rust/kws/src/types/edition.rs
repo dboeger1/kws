@@ -1,6 +1,5 @@
 use crate::types::keyword::Keyword;
 use strum::IntoEnumIterator;
-use super::keyword::KeywordDiscriminants;
 
 
 #[derive(Eq, Hash, PartialEq)]
@@ -19,9 +18,7 @@ impl Edition {
     }
 
     pub fn keywords(&self) -> impl Iterator<Item = Keyword> {
-        KeywordDiscriminants::iter().filter_map(|discriminant| {
-            let keyword = Keyword::from(&discriminant);
-            (keyword.category)(self).map(|_| keyword)
-        })
+        Keyword::iter()
+            .filter(|keyword| (keyword.category)(self).is_some())
     }
 }

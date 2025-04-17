@@ -1,4 +1,5 @@
 use std::collections::HashSet;
+use strum::IntoEnumIterator;
 use kws::{
     Error,
     Keyword,
