@@ -1,8 +1,8 @@
 use std::collections::HashSet;
 use strum::IntoEnumIterator;
 use kws::{
-    Error,
-    Keyword,
+    error::Error,
+    keyword::Keyword,
 
 };
 

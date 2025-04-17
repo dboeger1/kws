@@ -1,7 +1,9 @@
 use kws::{
-    Category,
-    Edition,
-    Keyword,
+    edition::Edition,
+    keyword::{
+        Category,
+        Keyword,
+    },
 };
 use std::{
     collections::{
