@@ -1,4 +1,7 @@
-use kws::{
+mod common;
+
+
+use common::{
     edition::Edition,
     keyword::{
         Category,
@@ -21,10 +24,15 @@ fn keywords() {
             assert_eq!(
                 ***keywords,
                 edition
+                    .0
                     .keywords()
                     .filter(|keyword|
-                        (keyword.category)(&edition).as_ref() == Some(&category)
+                        (keyword.category)(&edition.0)
+                            .map(|category| Category::from(category))
+                            .as_ref() ==
+                            Some(category)
                     )
+                    .map(|keyword| keyword.into())
                     .collect::<HashSet<_>>(),
             )
         }
@@ -45,35 +53,35 @@ type Expected = LazyLock<
 static EXPECTED: Expected = LazyLock::new(|| {
     [
         (
-            Edition::Rust2015,
+            Edition(kws::Edition::Rust2015),
             [
-                (Category::Strict,      &RUST_2015_KEYWORDS_STRICT),
-                (Category::Reserved,    &RUST_2015_KEYWORDS_RESERVED),
-                (Category::Weak,        &RUST_2015_KEYWORDS_WEAK),
+                (Category(kws::Category::Strict),      &RUST_2015_KEYWORDS_STRICT),
+                (Category(kws::Category::Reserved),    &RUST_2015_KEYWORDS_RESERVED),
+                (Category(kws::Category::Weak),        &RUST_2015_KEYWORDS_WEAK),
             ].into_iter().collect(),
         ),
         (
-            Edition::Rust2018,
+            Edition(kws::Edition::Rust2018),
             [
-                (Category::Strict,      &RUST_2018_KEYWORDS_STRICT),
-                (Category::Reserved,    &RUST_2018_KEYWORDS_RESERVED),
-                (Category::Weak,        &RUST_2018_KEYWORDS_WEAK),
+                (Category(kws::Category::Strict),      &RUST_2018_KEYWORDS_STRICT),
+                (Category(kws::Category::Reserved),    &RUST_2018_KEYWORDS_RESERVED),
+                (Category(kws::Category::Weak),        &RUST_2018_KEYWORDS_WEAK),
             ].into_iter().collect(),
         ),
         (
-            Edition::Rust2021,
+            Edition(kws::Edition::Rust2021),
             [
-                (Category::Strict,      &RUST_2021_KEYWORDS_STRICT),
-                (Category::Reserved,    &RUST_2021_KEYWORDS_RESERVED),
-                (Category::Weak,        &RUST_2021_KEYWORDS_WEAK),
+                (Category(kws::Category::Strict),      &RUST_2021_KEYWORDS_STRICT),
+                (Category(kws::Category::Reserved),    &RUST_2021_KEYWORDS_RESERVED),
+                (Category(kws::Category::Weak),        &RUST_2021_KEYWORDS_WEAK),
             ].into_iter().collect(),
         ),
         (
-            Edition::Rust2024,
+            Edition(kws::Edition::Rust2024),
             [
-                (Category::Strict,      &RUST_2024_KEYWORDS_STRICT),
-                (Category::Reserved,    &RUST_2024_KEYWORDS_RESERVED),
-                (Category::Weak,        &RUST_2024_KEYWORDS_WEAK),
+                (Category(kws::Category::Strict),      &RUST_2024_KEYWORDS_STRICT),
+                (Category(kws::Category::Reserved),    &RUST_2024_KEYWORDS_RESERVED),
+                (Category(kws::Category::Weak),        &RUST_2024_KEYWORDS_WEAK),
             ].into_iter().collect(),
         ),
     ].into_iter().collect()
@@ -84,282 +92,318 @@ type ExpectedKeywords = LazyLock<HashSet<Keyword>>;
 
 static RUST_2015_KEYWORDS_STRICT: ExpectedKeywords = LazyLock::new(||
     [
-        Keyword::As,
-        Keyword::Break,
-        Keyword::Const,
-        Keyword::Continue,
-        Keyword::Crate,
-        Keyword::Else,
-        Keyword::Enum,
-        Keyword::Extern,
-        Keyword::False,
-        Keyword::Fn,
-        Keyword::For,
-        Keyword::If,
-        Keyword::Impl,
-        Keyword::In,
-        Keyword::Let,
-        Keyword::Loop,
-        Keyword::Match,
-        Keyword::Mod,
-        Keyword::Move,
-        Keyword::Mut,
-        Keyword::Pub,
-        Keyword::Ref,
-        Keyword::Return,
-        Keyword::SelfValue,
-        Keyword::SelfType,
-        Keyword::Static,
-        Keyword::Struct,
-        Keyword::Super,
-        Keyword::Trait,
-        Keyword::True,
-        Keyword::Type,
-        Keyword::Unsafe,
-        Keyword::Use,
-        Keyword::Where,
-        Keyword::While,
-    ].into_iter().collect()
+        kws::Keyword::As,
+        kws::Keyword::Break,
+        kws::Keyword::Const,
+        kws::Keyword::Continue,
+        kws::Keyword::Crate,
+        kws::Keyword::Else,
+        kws::Keyword::Enum,
+        kws::Keyword::Extern,
+        kws::Keyword::False,
+        kws::Keyword::Fn,
+        kws::Keyword::For,
+        kws::Keyword::If,
+        kws::Keyword::Impl,
+        kws::Keyword::In,
+        kws::Keyword::Let,
+        kws::Keyword::Loop,
+        kws::Keyword::Match,
+        kws::Keyword::Mod,
+        kws::Keyword::Move,
+        kws::Keyword::Mut,
+        kws::Keyword::Pub,
+        kws::Keyword::Ref,
+        kws::Keyword::Return,
+        kws::Keyword::SelfValue,
+        kws::Keyword::SelfType,
+        kws::Keyword::Static,
+        kws::Keyword::Struct,
+        kws::Keyword::Super,
+        kws::Keyword::Trait,
+        kws::Keyword::True,
+        kws::Keyword::Type,
+        kws::Keyword::Unsafe,
+        kws::Keyword::Use,
+        kws::Keyword::Where,
+        kws::Keyword::While,
+    ]
+        .into_iter()
+        .map(|keyword| keyword.into())
+        .collect()
 );
 
 static RUST_2015_KEYWORDS_RESERVED: ExpectedKeywords = LazyLock::new(||
     [
-        Keyword::Abstract,
-        Keyword::Become,
-        Keyword::Box,
-        Keyword::Do,
-        Keyword::Final,
-        Keyword::Macro,
-        Keyword::Override,
-        Keyword::Priv,
-        Keyword::Typeof,
-        Keyword::Unsized,
-        Keyword::Virtual,
-        Keyword::Yield,
-    ].into_iter().collect()
+        kws::Keyword::Abstract,
+        kws::Keyword::Become,
+        kws::Keyword::Box,
+        kws::Keyword::Do,
+        kws::Keyword::Final,
+        kws::Keyword::Macro,
+        kws::Keyword::Override,
+        kws::Keyword::Priv,
+        kws::Keyword::Typeof,
+        kws::Keyword::Unsized,
+        kws::Keyword::Virtual,
+        kws::Keyword::Yield,
+    ]
+        .into_iter()
+        .map(|keyword| keyword.into())
+        .collect()
 );
 
 static RUST_2015_KEYWORDS_WEAK: ExpectedKeywords = LazyLock::new(||
     [
-        Keyword::Dyn,
-        Keyword::MacroRules,
-        Keyword::Raw,
-        Keyword::Safe,
-        Keyword::StaticLifetime,
-        Keyword::Union,
-    ].into_iter().collect()
+        kws::Keyword::Dyn,
+        kws::Keyword::MacroRules,
+        kws::Keyword::Raw,
+        kws::Keyword::Safe,
+        kws::Keyword::StaticLifetime,
+        kws::Keyword::Union,
+    ]
+        .into_iter()
+        .map(|keyword| keyword.into())
+        .collect()
 );
 
 static RUST_2018_KEYWORDS_STRICT: ExpectedKeywords = LazyLock::new(||
     [
-        Keyword::As,
-        Keyword::Async,
-        Keyword::Await,
-        Keyword::Break,
-        Keyword::Const,
-        Keyword::Continue,
-        Keyword::Crate,
-        Keyword::Dyn,
-        Keyword::Else,
-        Keyword::Enum,
-        Keyword::Extern,
-        Keyword::False,
-        Keyword::Fn,
-        Keyword::For,
-        Keyword::If,
-        Keyword::Impl,
-        Keyword::In,
-        Keyword::Let,
-        Keyword::Loop,
-        Keyword::Match,
-        Keyword::Mod,
-        Keyword::Move,
-        Keyword::Mut,
-        Keyword::Pub,
-        Keyword::Ref,
-        Keyword::Return,
-        Keyword::SelfValue,
-        Keyword::SelfType,
-        Keyword::Static,
-        Keyword::Struct,
-        Keyword::Super,
-        Keyword::Trait,
-        Keyword::True,
-        Keyword::Type,
-        Keyword::Unsafe,
-        Keyword::Use,
-        Keyword::Where,
-        Keyword::While,
-    ].into_iter().collect()
+        kws::Keyword::As,
+        kws::Keyword::Async,
+        kws::Keyword::Await,
+        kws::Keyword::Break,
+        kws::Keyword::Const,
+        kws::Keyword::Continue,
+        kws::Keyword::Crate,
+        kws::Keyword::Dyn,
+        kws::Keyword::Else,
+        kws::Keyword::Enum,
+        kws::Keyword::Extern,
+        kws::Keyword::False,
+        kws::Keyword::Fn,
+        kws::Keyword::For,
+        kws::Keyword::If,
+        kws::Keyword::Impl,
+        kws::Keyword::In,
+        kws::Keyword::Let,
+        kws::Keyword::Loop,
+        kws::Keyword::Match,
+        kws::Keyword::Mod,
+        kws::Keyword::Move,
+        kws::Keyword::Mut,
+        kws::Keyword::Pub,
+        kws::Keyword::Ref,
+        kws::Keyword::Return,
+        kws::Keyword::SelfValue,
+        kws::Keyword::SelfType,
+        kws::Keyword::Static,
+        kws::Keyword::Struct,
+        kws::Keyword::Super,
+        kws::Keyword::Trait,
+        kws::Keyword::True,
+        kws::Keyword::Type,
+        kws::Keyword::Unsafe,
+        kws::Keyword::Use,
+        kws::Keyword::Where,
+        kws::Keyword::While,
+    ]
+        .into_iter()
+        .map(|keyword| keyword.into())
+        .collect()
 );
 
 static RUST_2018_KEYWORDS_RESERVED: ExpectedKeywords = LazyLock::new(||
     [
-        Keyword::Abstract,
-        Keyword::Become,
-        Keyword::Box,
-        Keyword::Do,
-        Keyword::Final,
-        Keyword::Macro,
-        Keyword::Override,
-        Keyword::Priv,
-        Keyword::Try,
-        Keyword::Typeof,
-        Keyword::Unsized,
-        Keyword::Virtual,
-        Keyword::Yield,
-    ].into_iter().collect()
+        kws::Keyword::Abstract,
+        kws::Keyword::Become,
+        kws::Keyword::Box,
+        kws::Keyword::Do,
+        kws::Keyword::Final,
+        kws::Keyword::Macro,
+        kws::Keyword::Override,
+        kws::Keyword::Priv,
+        kws::Keyword::Try,
+        kws::Keyword::Typeof,
+        kws::Keyword::Unsized,
+        kws::Keyword::Virtual,
+        kws::Keyword::Yield,
+    ]
+        .into_iter()
+        .map(|keyword| keyword.into())
+        .collect()
 );
 
 static RUST_2018_KEYWORDS_WEAK: ExpectedKeywords = LazyLock::new(||
     [
-        Keyword::MacroRules,
-        Keyword::Raw,
-        Keyword::Safe,
-        Keyword::StaticLifetime,
-        Keyword::Union,
-    ].into_iter().collect()
+        kws::Keyword::MacroRules,
+        kws::Keyword::Raw,
+        kws::Keyword::Safe,
+        kws::Keyword::StaticLifetime,
+        kws::Keyword::Union,
+    ]
+        .into_iter()
+        .map(|keyword| keyword.into())
+        .collect()
 );
 
 static RUST_2021_KEYWORDS_STRICT: ExpectedKeywords = LazyLock::new(||
     [
-        Keyword::As,
-        Keyword::Async,
-        Keyword::Await,
-        Keyword::Break,
-        Keyword::Const,
-        Keyword::Continue,
-        Keyword::Crate,
-        Keyword::Dyn,
-        Keyword::Else,
-        Keyword::Enum,
-        Keyword::Extern,
-        Keyword::False,
-        Keyword::Fn,
-        Keyword::For,
-        Keyword::If,
-        Keyword::Impl,
-        Keyword::In,
-        Keyword::Let,
-        Keyword::Loop,
-        Keyword::Match,
-        Keyword::Mod,
-        Keyword::Move,
-        Keyword::Mut,
-        Keyword::Pub,
-        Keyword::Ref,
-        Keyword::Return,
-        Keyword::SelfValue,
-        Keyword::SelfType,
-        Keyword::Static,
-        Keyword::Struct,
-        Keyword::Super,
-        Keyword::Trait,
-        Keyword::True,
-        Keyword::Type,
-        Keyword::Unsafe,
-        Keyword::Use,
-        Keyword::Where,
-        Keyword::While,
-    ].into_iter().collect()
+        kws::Keyword::As,
+        kws::Keyword::Async,
+        kws::Keyword::Await,
+        kws::Keyword::Break,
+        kws::Keyword::Const,
+        kws::Keyword::Continue,
+        kws::Keyword::Crate,
+        kws::Keyword::Dyn,
+        kws::Keyword::Else,
+        kws::Keyword::Enum,
+        kws::Keyword::Extern,
+        kws::Keyword::False,
+        kws::Keyword::Fn,
+        kws::Keyword::For,
+        kws::Keyword::If,
+        kws::Keyword::Impl,
+        kws::Keyword::In,
+        kws::Keyword::Let,
+        kws::Keyword::Loop,
+        kws::Keyword::Match,
+        kws::Keyword::Mod,
+        kws::Keyword::Move,
+        kws::Keyword::Mut,
+        kws::Keyword::Pub,
+        kws::Keyword::Ref,
+        kws::Keyword::Return,
+        kws::Keyword::SelfValue,
+        kws::Keyword::SelfType,
+        kws::Keyword::Static,
+        kws::Keyword::Struct,
+        kws::Keyword::Super,
+        kws::Keyword::Trait,
+        kws::Keyword::True,
+        kws::Keyword::Type,
+        kws::Keyword::Unsafe,
+        kws::Keyword::Use,
+        kws::Keyword::Where,
+        kws::Keyword::While,
+    ]
+        .into_iter()
+        .map(|keyword| keyword.into())
+        .collect()
 );
 
 static RUST_2021_KEYWORDS_RESERVED: ExpectedKeywords = LazyLock::new(||
     [
-        Keyword::Abstract,
-        Keyword::Become,
-        Keyword::Box,
-        Keyword::Do,
-        Keyword::Final,
-        Keyword::Macro,
-        Keyword::Override,
-        Keyword::Priv,
-        Keyword::Try,
-        Keyword::Typeof,
-        Keyword::Unsized,
-        Keyword::Virtual,
-        Keyword::Yield,
-    ].into_iter().collect()
+        kws::Keyword::Abstract,
+        kws::Keyword::Become,
+        kws::Keyword::Box,
+        kws::Keyword::Do,
+        kws::Keyword::Final,
+        kws::Keyword::Macro,
+        kws::Keyword::Override,
+        kws::Keyword::Priv,
+        kws::Keyword::Try,
+        kws::Keyword::Typeof,
+        kws::Keyword::Unsized,
+        kws::Keyword::Virtual,
+        kws::Keyword::Yield,
+    ]
+        .into_iter()
+        .map(|keyword| keyword.into())
+        .collect()
 );
 
 static RUST_2021_KEYWORDS_WEAK: ExpectedKeywords = LazyLock::new(||
     [
-        Keyword::MacroRules,
-        Keyword::Raw,
-        Keyword::Safe,
-        Keyword::StaticLifetime,
-        Keyword::Union,
-    ].into_iter().collect()
+        kws::Keyword::MacroRules,
+        kws::Keyword::Raw,
+        kws::Keyword::Safe,
+        kws::Keyword::StaticLifetime,
+        kws::Keyword::Union,
+    ]
+        .into_iter()
+        .map(|keyword| keyword.into())
+        .collect()
 );
 
 static RUST_2024_KEYWORDS_STRICT: ExpectedKeywords = LazyLock::new(||
     [
-        Keyword::As,
-        Keyword::Async,
-        Keyword::Await,
-        Keyword::Break,
-        Keyword::Const,
-        Keyword::Continue,
-        Keyword::Crate,
-        Keyword::Dyn,
-        Keyword::Else,
-        Keyword::Enum,
-        Keyword::Extern,
-        Keyword::False,
-        Keyword::Fn,
-        Keyword::For,
-        Keyword::If,
-        Keyword::Impl,
-        Keyword::In,
-        Keyword::Let,
-        Keyword::Loop,
-        Keyword::Match,
-        Keyword::Mod,
-        Keyword::Move,
-        Keyword::Mut,
-        Keyword::Pub,
-        Keyword::Ref,
-        Keyword::Return,
-        Keyword::SelfValue,
-        Keyword::SelfType,
-        Keyword::Static,
-        Keyword::Struct,
-        Keyword::Super,
-        Keyword::Trait,
-        Keyword::True,
-        Keyword::Type,
-        Keyword::Unsafe,
-        Keyword::Use,
-        Keyword::Where,
-        Keyword::While,
-    ].into_iter().collect()
+        kws::Keyword::As,
+        kws::Keyword::Async,
+        kws::Keyword::Await,
+        kws::Keyword::Break,
+        kws::Keyword::Const,
+        kws::Keyword::Continue,
+        kws::Keyword::Crate,
+        kws::Keyword::Dyn,
+        kws::Keyword::Else,
+        kws::Keyword::Enum,
+        kws::Keyword::Extern,
+        kws::Keyword::False,
+        kws::Keyword::Fn,
+        kws::Keyword::For,
+        kws::Keyword::If,
+        kws::Keyword::Impl,
+        kws::Keyword::In,
+        kws::Keyword::Let,
+        kws::Keyword::Loop,
+        kws::Keyword::Match,
+        kws::Keyword::Mod,
+        kws::Keyword::Move,
+        kws::Keyword::Mut,
+        kws::Keyword::Pub,
+        kws::Keyword::Ref,
+        kws::Keyword::Return,
+        kws::Keyword::SelfValue,
+        kws::Keyword::SelfType,
+        kws::Keyword::Static,
+        kws::Keyword::Struct,
+        kws::Keyword::Super,
+        kws::Keyword::Trait,
+        kws::Keyword::True,
+        kws::Keyword::Type,
+        kws::Keyword::Unsafe,
+        kws::Keyword::Use,
+        kws::Keyword::Where,
+        kws::Keyword::While,
+    ]
+        .into_iter()
+        .map(|keyword| keyword.into())
+        .collect()
 );
 
 static RUST_2024_KEYWORDS_RESERVED: ExpectedKeywords = LazyLock::new(||
     [
-        Keyword::Abstract,
-        Keyword::Become,
-        Keyword::Box,
-        Keyword::Do,
-        Keyword::Final,
-        Keyword::Gen,
-        Keyword::Macro,
-        Keyword::Override,
-        Keyword::Priv,
-        Keyword::Try,
-        Keyword::Typeof,
-        Keyword::Unsized,
-        Keyword::Virtual,
-        Keyword::Yield,
-    ].into_iter().collect()
+        kws::Keyword::Abstract,
+        kws::Keyword::Become,
+        kws::Keyword::Box,
+        kws::Keyword::Do,
+        kws::Keyword::Final,
+        kws::Keyword::Gen,
+        kws::Keyword::Macro,
+        kws::Keyword::Override,
+        kws::Keyword::Priv,
+        kws::Keyword::Try,
+        kws::Keyword::Typeof,
+        kws::Keyword::Unsized,
+        kws::Keyword::Virtual,
+        kws::Keyword::Yield,
+    ]
+        .into_iter()
+        .map(|keyword| keyword.into())
+        .collect()
 );
 
 static RUST_2024_KEYWORDS_WEAK: ExpectedKeywords = LazyLock::new(||
     [
-        Keyword::MacroRules,
-        Keyword::Raw,
-        Keyword::Safe,
-        Keyword::StaticLifetime,
-        Keyword::Union,
-    ].into_iter().collect()
+        kws::Keyword::MacroRules,
+        kws::Keyword::Raw,
+        kws::Keyword::Safe,
+        kws::Keyword::StaticLifetime,
+        kws::Keyword::Union,
+    ]
+        .into_iter()
+        .map(|keyword| keyword.into())
+        .collect()
 );

@@ -1,8 +1,7 @@
-use crate::keyword::Keyword;
+use crate::Keyword;
 use strum::IntoEnumIterator;
 
 
-#[derive(Eq, Hash, PartialEq)]
 pub enum Edition {
     Rust2015,
     Rust2018,

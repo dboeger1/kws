@@ -1,3 +1,17 @@
 pub mod edition;
-pub mod error;
 pub mod keyword;
+
+
+pub use edition::Edition;
+pub use keyword::{
+    Category,
+    Keyword,
+};
+
+
+#[derive(Debug, thiserror::Error)]
+#[error("{message}")]
+pub struct Error {
+    message: String,
+    source: Option<Box<dyn std::error::Error>>,
+}
