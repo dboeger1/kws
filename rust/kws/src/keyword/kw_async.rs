@@ -1,9 +1,7 @@
 use crate::{
-    edition::Edition,
-    keyword::{
-        Category,
-        KeywordData,
-    },
+    Category,
+    Edition,
+    KeywordData,
 };
 
 

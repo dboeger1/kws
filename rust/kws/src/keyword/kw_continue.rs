@@ -1,4 +1,4 @@
-use crate::keyword::{
+use crate::{
     Category,
     KeywordData,
 };

@@ -21,8 +21,8 @@ fn values_consistent() -> Result<(), Error> {
     for keyword in kws::Keyword::iter() {
         let value = keyword.value;
         assert_eq!(
-            Keyword::from(keyword),
-            Keyword::from(kws::Keyword::try_from(value)?),
+            Keyword(keyword),
+            Keyword(kws::Keyword::try_from(value)?),
         );
     }
 

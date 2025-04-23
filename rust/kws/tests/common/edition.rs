@@ -1,28 +1,12 @@
 use std::{
     hash::Hash,
     mem::discriminant,
-    //ops::Deref,
 };
 
 
-pub(crate) struct Edition(pub(crate) kws::Edition);
-
-//impl Deref for Edition {
-//    type Target = kws::Edition;
-//
-//
-//    fn deref(&self) -> &Self::Target {
-//        &self.0
-//    }
-//}
+pub struct Edition(pub kws::Edition);
 
 impl Eq for Edition {}
-
-impl From<kws::Edition> for Edition {
-    fn from(value: kws::Edition) -> Self {
-        Self(value)
-    }
-}
 
 impl Hash for Edition {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {

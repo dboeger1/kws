@@ -6,6 +6,7 @@ pub use edition::Edition;
 pub use keyword::{
     Category,
     Keyword,
+    KeywordData,
 };
 
 

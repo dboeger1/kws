@@ -1,29 +1,13 @@
 use std::{
     hash::Hash,
     mem::discriminant,
-    //ops::Deref,
 };
 
 
 #[derive(Debug)]
-pub(crate) struct Keyword(pub(crate) kws::Keyword);
-
-//impl Deref for Keyword {
-//    type Target = kws::Keyword;
-//
-//
-//    fn deref(&self) -> &Self::Target {
-//        &self.0
-//    }
-//}
+pub struct Keyword(pub kws::Keyword);
 
 impl Eq for Keyword {}
-
-impl From<kws::Keyword> for Keyword {
-    fn from(value: kws::Keyword) -> Self {
-        Self(value)
-    }
-}
 
 impl Hash for Keyword {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
@@ -92,29 +76,27 @@ impl PartialEq for Keyword {
             (kws::Keyword::Where, kws::Keyword::Where) |
             (kws::Keyword::While, kws::Keyword::While) |
             (kws::Keyword::Yield, kws::Keyword::Yield),
-        )
+        ) &&
+            KeywordData(self.0.data()) == KeywordData(other.0.data())
     }
 }
 
 
-pub(crate) struct Category(pub(crate) kws::Category);
+pub struct KeywordData(pub &'static kws::KeywordData);
 
-//impl Deref for Category {
-//    type Target = kws::Category;
-//
-//
-//    fn deref(&self) -> &Self::Target {
-//        &self.0
-//    }
-//}
+impl Eq for KeywordData {}
+
+impl PartialEq for KeywordData {
+    fn eq(&self, other: &Self) -> bool {
+        self.0.value == other.0.value &&
+            self.0.category as usize == other.0.category as usize
+    }
+}
+
+
+pub struct Category(pub kws::Category);
 
 impl Eq for Category {}
-
-impl From<kws::Category> for Category {
-    fn from(value: kws::Category) -> Self {
-        Self(value)
-    }
-}
 
 impl Hash for Category {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
