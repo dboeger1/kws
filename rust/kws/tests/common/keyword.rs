@@ -160,6 +160,15 @@ impl PartialEq for KeywordData {
 
 pub struct Category(pub kws::Category);
 
+impl Debug for Category {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", match self.0 {
+            kws::Category::Strict => "Strict",
+            kws::Category::Reserved => "Reserved",
+            kws::Category::Weak => "Weak",
+        })
+    }
+}
 impl Eq for Category {}
 
 impl Hash for Category {
