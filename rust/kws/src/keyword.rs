@@ -65,7 +65,7 @@ use std::ops::Deref;
 use strum_macros::EnumIter;
 
 
-#[derive(Debug, EnumIter)]
+#[derive(EnumIter)]
 pub enum Keyword {
     Abstract,
     As,
@@ -329,14 +329,12 @@ impl TryFrom<&str> for Keyword {
 }
 
 
-#[derive(Debug)]
 pub struct KeywordData {
     pub value: &'static str,
     pub category: fn (edition: &Edition) -> Option<Category>,
 }
 
 
-#[derive(Debug)]
 pub enum Category {
     Strict,
     Reserved,

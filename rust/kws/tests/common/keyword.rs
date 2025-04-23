@@ -1,11 +1,75 @@
 use std::{
+    fmt::Debug,
     hash::Hash,
     mem::discriminant,
 };
 
 
-#[derive(Debug)]
 pub struct Keyword(pub kws::Keyword);
+
+impl Debug for Keyword {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", match self.0 {
+            kws::Keyword::Abstract => "Abstract",
+            kws::Keyword::As => "As",
+            kws::Keyword::Async => "Async",
+            kws::Keyword::Await => "Await",
+            kws::Keyword::Become => "Become",
+            kws::Keyword::Box => "Box",
+            kws::Keyword::Break => "Break",
+            kws::Keyword::Const => "Const",
+            kws::Keyword::Continue => "Continue",
+            kws::Keyword::Crate => "Crate",
+            kws::Keyword::Do => "Do",
+            kws::Keyword::Dyn => "Dyn",
+            kws::Keyword::Else => "Else",
+            kws::Keyword::Enum => "Enum",
+            kws::Keyword::Extern => "Extern",
+            kws::Keyword::False => "False",
+            kws::Keyword::Final => "Final",
+            kws::Keyword::Fn => "Fn",
+            kws::Keyword::For => "For",
+            kws::Keyword::Gen => "Gen",
+            kws::Keyword::If => "If",
+            kws::Keyword::Impl => "Impl",
+            kws::Keyword::In => "In",
+            kws::Keyword::Let => "Let",
+            kws::Keyword::Loop => "Loop",
+            kws::Keyword::Macro => "Macro",
+            kws::Keyword::MacroRules => "MacroRules",
+            kws::Keyword::Match => "Match",
+            kws::Keyword::Mod => "Mod",
+            kws::Keyword::Move => "Move",
+            kws::Keyword::Mut => "Mut",
+            kws::Keyword::Override => "Override",
+            kws::Keyword::Priv => "Priv",
+            kws::Keyword::Pub => "Pub",
+            kws::Keyword::Raw => "Raw",
+            kws::Keyword::Ref => "Ref",
+            kws::Keyword::Return => "Return",
+            kws::Keyword::Safe => "Safe",
+            kws::Keyword::SelfType => "SelfType",
+            kws::Keyword::SelfValue => "SelfValue",
+            kws::Keyword::Static => "Static",
+            kws::Keyword::StaticLifetime => "StaticLifetime",
+            kws::Keyword::Struct => "Struct",
+            kws::Keyword::Super => "Super",
+            kws::Keyword::Trait => "Trait",
+            kws::Keyword::True => "True",
+            kws::Keyword::Try => "Try",
+            kws::Keyword::Type => "Type",
+            kws::Keyword::Typeof => "Typeof",
+            kws::Keyword::Union => "Union",
+            kws::Keyword::Unsafe => "Unsafe",
+            kws::Keyword::Unsized => "Unsized",
+            kws::Keyword::Use => "Use",
+            kws::Keyword::Virtual => "Virtual",
+            kws::Keyword::Where => "Where",
+            kws::Keyword::While => "While",
+            kws::Keyword::Yield => "Yield",
+        })
+    }
+}
 
 impl Eq for Keyword {}
 
