@@ -1,5 +1,5 @@
-pub mod edition;
-pub mod keyword;
+mod edition;
+mod keyword;
 
 
 pub use edition::Edition;
