@@ -19,6 +19,21 @@ use std::{
 
 
 #[test]
+fn keyword() {
+    for (edition, _) in &*EXPECTED {
+        for keyword in kws::Keyword::iter() {
+            assert_eq!(
+                (keyword.category)(&edition.0)
+                    .map(|category| Category(category)),
+                edition.0.keyword(keyword.value)
+                    .and_then(|keyword| (keyword.data().category)(&edition.0))
+                    .map(|category| Category(category)),
+            );
+        }
+    }
+}
+
+#[test]
 fn keywords() {
     for (edition, expected) in &*EXPECTED {
         for (category, keywords) in expected {
@@ -36,21 +51,6 @@ fn keywords() {
                     .map(|keyword| Keyword(keyword))
                     .collect::<HashSet<_>>(),
             )
-        }
-    }
-}
-
-#[test]
-fn keyword() {
-    for (edition, _) in &*EXPECTED {
-        for keyword in kws::Keyword::iter() {
-            assert_eq!(
-                (keyword.category)(&edition.0)
-                    .map(|category| Category(category)),
-                edition.0.keyword(keyword.value)
-                    .and_then(|keyword| (keyword.data().category)(&edition.0))
-                    .map(|category| Category(category)),
-            );
         }
     }
 }
