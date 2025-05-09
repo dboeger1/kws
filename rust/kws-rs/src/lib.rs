@@ -1,50 +1,51 @@
 //! # kws-rs
 //!
-//! kws-rs is a small helper library for identifying keywords in rust.
+//! kws-rs is a small helper library for identifying [keywords] in rust.
 //!
 //!
-//! ## Keywords
+//! ## Usage
+//!
+//! The `Keyword` enum contains all keywords across all rust editions. You can
+//! specify a variant directly or attempt to get one from a `&str`:
 //!
 //! ```rust
-//! use kws_rs::{
-//!     Category,
-//!     Edition,
-//!     Keyword,
-//! };
+//! use kws_rs::Keyword;
 //!
-//! let keyword = Keyword::Dyn;
-//! assert_eq!("dyn", keyword.value);
+//! assert!(Keyword::try_from("not a keyword").is_err());
 //! assert!(matches!(
-//!     (keyword.category)(&Edition::Rust2015),
-//!     Some(Category::Weak),
+//!     Keyword::try_from("enum"),
+//!     Ok(Keyword::Enum),
 //! ));
+//! ````
+//!
+//! To get the keyword category for a particular edition, you must specify the
+//! edition:
+//!  
+//! ```rust
+//! use kws_rs::{Category, Edition, Keyword};
+//!
+//! let keyword = Keyword::Async;
+//! assert!((keyword.category)(&Edition::Rust2015).is_none());
 //! assert!(matches!(
 //!     (keyword.category)(&Edition::Rust2018),
 //!     Some(Category::Strict),
 //! ));
 //! ```
 //!
+//! Most of the time, you'll probably only care about whichever edition you're
+//! using to build your programs. The `Edition` enum provides some helper
+//! functions which may minimize verbosity:
 //!
-//! ## Editions
+//! ```rust
+//! use kws_rs::{Category, Edition, Keyword};
+//!
+//! let edition = Edition::Rust2021;
+//! assert!(edition.keyword("match").is_some());
+//! assert!(edition.keyword("gen").is_none());
+//! ```
 //!
 //!
-//! ## Motivation
-//!
-//! There are similar alternatives, but they often have limitations which
-//! prevent them from being used for certain use cases. The main one is that
-//! they tend to filter out keywords by edition at compile time, such that a
-//! keyword will only be identified if it is a keyword in the edition with which
-//! the program is built.
-//!
-//! kws-rs, on the other hand, provides information about all editions at
-//! runtime regardless of which edition the program is built with. This allows
-//! you to build code in one edition with name-related logic for other editions.
-//! A practical example of when you might want this would be generating a hint
-//! message which tells the user which edition they need to upgrade to in order
-//! to use a keyword.
-//!
-//! Still only care about a single edition? No problem! kws-rs still makes that
-//! just as easy.
+//! [keywords]: https://doc.rust-lang.org/reference/keywords.html
 
 
 mod edition;
