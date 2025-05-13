@@ -2,7 +2,7 @@ mod common;
 
 
 use common::keyword::Keyword;
-use kws_rs::Error;
+use kws::Error;
 use std::collections::HashSet;
 use strum::IntoEnumIterator;
 
@@ -10,7 +10,7 @@ use strum::IntoEnumIterator;
 #[test]
 fn values_unique() {
     let mut seen: HashSet<&'static str> = HashSet::new();
-    for keyword in kws_rs::Keyword::iter() {
+    for keyword in kws::Keyword::iter() {
         assert!(!seen.contains(keyword.value));
         seen.insert(keyword.value);
     }
@@ -18,11 +18,11 @@ fn values_unique() {
 
 #[test]
 fn values_consistent() -> Result<(), Error> {
-    for keyword in kws_rs::Keyword::iter() {
+    for keyword in kws::Keyword::iter() {
         let value = keyword.value;
         assert_eq!(
             Keyword(keyword),
-            Keyword(kws_rs::Keyword::try_from(value)?),
+            Keyword(kws::Keyword::try_from(value)?),
         );
     }
 
@@ -31,5 +31,5 @@ fn values_consistent() -> Result<(), Error> {
 
 #[test]
 fn value_invalid() {
-    assert!(kws_rs::Keyword::try_from("invalid").is_err());
+    assert!(kws::Keyword::try_from("invalid").is_err());
 }

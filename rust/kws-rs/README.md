@@ -8,7 +8,7 @@ The `Keyword` enum contains all keywords across all Rust editions. You can
 specify a variant directly or attempt to get one from a `&str`:
 
 ```rust
-use kws_rs::Keyword;
+use kws::Keyword;
 
 assert!(Keyword::try_from("not a keyword").is_err());
 assert!(matches!(
@@ -21,7 +21,7 @@ To get the keyword category for a particular edition, you must specify the
 edition:
  
 ```rust
-use kws_rs::{Category, Edition, Keyword};
+use kws::{Category, Edition, Keyword};
 
 let keyword = Keyword::Async;
 assert!((keyword.category)(&Edition::Rust2015).is_none());
@@ -36,7 +36,7 @@ to build your programs. The `Edition` enum provides some helper functions which
 may minimize verbosity:
 
 ```rust
-use kws_rs::{Category, Edition, Keyword};
+use kws::{Category, Edition, Keyword};
 
 let edition = Edition::Rust2021;
 assert!(edition.keyword("match").is_some());

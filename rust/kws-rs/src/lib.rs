@@ -9,7 +9,7 @@
 //! specify a variant directly or attempt to get one from a `&str`:
 //!
 //! ```rust
-//! use kws_rs::Keyword;
+//! use kws::Keyword;
 //!
 //! assert!(Keyword::try_from("not a keyword").is_err());
 //! assert!(matches!(
@@ -22,7 +22,7 @@
 //! edition:
 //!  
 //! ```rust
-//! use kws_rs::{Category, Edition, Keyword};
+//! use kws::{Category, Edition, Keyword};
 //!
 //! let keyword = Keyword::Async;
 //! assert!((keyword.category)(&Edition::Rust2015).is_none());
@@ -37,7 +37,7 @@
 //! functions which may minimize verbosity:
 //!
 //! ```rust
-//! use kws_rs::{Category, Edition, Keyword};
+//! use kws::{Category, Edition, Keyword};
 //!
 //! let edition = Edition::Rust2021;
 //! assert!(edition.keyword("match").is_some());

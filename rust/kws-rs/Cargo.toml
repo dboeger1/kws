@@ -3,6 +3,9 @@ name = "kws-rs"
 version = "0.1.0"
 edition = "2024"
 
+[lib]
+name = "kws"
+
 [dependencies]
 strum = "0.27.1"
 strum_macros = "0.27.1"
